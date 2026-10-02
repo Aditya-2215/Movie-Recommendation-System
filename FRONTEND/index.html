@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#08090b">
+    <meta name="description" content="CineMatch is an intelligent content-based movie recommendation engine powered by TF-IDF, cosine similarity, FastAPI and TMDB.">
+    <meta name="author" content="CineMatch">
+    <title>CineMatch — Intelligent Movie Discovery</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="ambient-grid"></div>
+
+    <!-- NAVIGATION -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#top" class="brand">
+                <span class="brand-mark">C</span>
+                <span class="brand-text">Cine<span>Match</span></span>
+            </a>
+
+            <nav class="desktop-nav" aria-label="Main navigation">
+                <a href="#discover">Discover</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#technology">Technology</a>
+            </nav>
+
+            <div class="nav-right">
+                <div class="nav-status" id="apiStatus" aria-live="polite">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+            <a href="#discover">Discover</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#technology">Technology</a>
+        </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main id="top">
+
+        <!-- HERO -->
+        <section class="hero" id="discover">
+            <div class="hero-container">
+                <div class="hero-badge reveal">
+                    <span class="badge-dot"></span>
+                    AI-POWERED MOVIE DISCOVERY
+                </div>
+
+                <div class="hero-copy reveal">
+                    <h1>Find your next <span class="gradient-text">favorite movie.</span></h1>
+                    <p class="hero-description">
+                        Tell CineMatch about one movie you love. Our content-based recommendation engine analyzes its story, genres and themes to discover films that match your taste.
+                    </p>
+                </div>
+
+                <!-- SEARCH -->
+                <div class="search-area reveal" id="searchArea">
+                    <div class="search-box" id="searchBox">
+                        <div class="search-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path d="m20 20-4-4"></path>
+                            </svg>
+                        </div>
+                        <input id="movieInput" type="search" placeholder="Search for a movie..." autocomplete="off" spellcheck="false" aria-label="Search for a movie">
+                        <button id="clearBtn" class="clear-btn hidden" aria-label="Clear search">×</button>
+                        <button id="recommendBtn" class="recommend-btn">
+                            <span>Discover</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"></path>
+                                <path d="m13 6 6 6-6 6"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- SEARCH SUGGESTIONS -->
+                    <div id="suggestions" class="suggestions hidden" role="listbox"></div>
+                    <div class="search-hint">
+                        <span>Press <kbd>Enter</kbd> to discover</span>
+                        <span>Content-based recommendations</span>
+                    </div>
+                </div>
+
+                <!-- QUICK SEARCH -->
+                <div class="quick-picks reveal" aria-label="Popular movie searches">
+                    <span class="quick-label">Popular</span>
+                    <button data-title="Inception">Inception</button>
+                    <button data-title="Toy Story">Toy Story</button>
+                    <button data-title="The Dark Knight">The Dark Knight</button>
+                    <button data-title="Interstellar">Interstellar</button>
+                    <button data-title="Avatar">Avatar</button>
+                </div>
+
+                <!-- HERO STATS -->
+                <div class="hero-stats reveal">
+                    <div class="stat">
+                        <strong>TF-IDF</strong>
+                        <span>Text representation</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <strong>Cosine</strong>
+                        <span>Similarity engine</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <strong>TMDB</strong>
+                        <span>Movie metadata</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <strong>FastAPI</strong>
+                        <span>Backend API</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WELCOME / EMPTY STATE -->
+        <section id="welcome" class="welcome-section">
+            <div class="section-container">
+                <div class="section-label reveal">
+                    <span></span> HOW IT WORKS
+                </div>
+                <h2 class="reveal">Recommendation, <span>without the noise.</span></h2>
+                <p class="section-description reveal">
+                    CineMatch focuses on what a movie is actually about. Instead of relying only on popularity, it compares the textual characteristics of movies to find meaningful similarities.
+                </p>
+
+                <div class="process-grid reveal">
+                    <article class="process-card">
+                        <div class="process-number">01</div>
+                        <div class="process-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                <path d="M7 8h10"></path><path d="M7 12h6"></path>
+                            </svg>
+                        </div>
+                        <h3>Choose a movie</h3>
+                        <p>Start with a film you already know and enjoy.</p>
+                    </article>
+                    <article class="process-card">
+                        <div class="process-number">02</div>
+                        <div class="process-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path d="m20 20-4-4"></path><path d="M8 11h6"></path>
+                            </svg>
+                        </div>
+                        <h3>Analyze content</h3>
+                        <p>Movie descriptions, genres and themes are converted into numerical vectors.</p>
+                    </article>
+                    <article class="process-card">
+                        <div class="process-number">03</div>
+                        <div class="process-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M4 18 10 12l4 4 6-8"></path><path d="M16 8h4v4"></path>
+                            </svg>
+                        </div>
+                        <h3>Rank similarities</h3>
+                        <p>Cosine similarity compares your selected movie against the movie database.</p>
+                    </article>
+                    <article class="process-card">
+                        <div class="process-number">04</div>
+                        <div class="process-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M12 3 14.8 8.2 21 9.1l-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.1l6.2-.9L12 3Z"></path>
+                            </svg>
+                        </div>
+                        <h3>Discover</h3>
+                        <p>Get a ranked list of movies worth exploring next.</p>
+                    </article>
+                </div>
+
+                <div class="welcome-empty reveal">
+                    <div class="welcome-mark">C</div>
+                    <h3>Start with a film you know.</h3>
+                    <p>Your personalized recommendations will appear here after you search for a movie.</p>
+                    <button class="scroll-to-search" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                        Start discovering <span>↑</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results" class="results hidden" aria-live="polite">
+            <div class="section-container">
+                <!-- RESULT HEADER -->
+                <div class="result-header reveal">
+                    <div>
+                        <div class="section-label"><span></span>YOUR DISCOVERY</div>
+                        <h2>Because you chose <span id="selectedHeading">—</span></h2>
+                    </div>
+                    <button id="newSearchBtn" class="ghost-btn">
+                        <span>New search</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- SELECTED MOVIE -->
+                <article id="selectedMovie" class="featured-card reveal"></article>
+
+                <!-- RECOMMENDATION HEADER -->
+                <div class="recommendation-header reveal">
+                    <div>
+                        <div class="section-label"><span></span>YOUR RECOMMENDATIONS</div>
+                        <h2>Movies worth discovering</h2>
+                        <p>Ranked by content similarity to your selection.</p>
+                    </div>
+                    <span id="countText" class="count-pill"></span>
+                </div>
+
+                <!-- MOVIE GRID -->
+                <div id="recommendations" class="movie-grid reveal"></div>
+            </div>
+        </section>
+
+        <!-- LOADING -->
+        <section id="loading" class="loading hidden" aria-live="polite">
+            <div class="loading-container">
+                <div class="loader-ring"></div>
+                <div class="loading-copy">
+                    <strong>Finding your next watch</strong>
+                    <span>Comparing movie content and calculating similarities...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TECHNOLOGY -->
+        <section id="technology" class="technology-section">
+            <div class="section-container">
+                <div class="technology-layout">
+                    <div class="technology-copy reveal">
+                        <div class="section-label"><span></span>UNDER THE HOOD</div>
+                        <h2>Simple interface. <span>Real machine learning.</span></h2>
+                        <p>CineMatch uses a content-based recommendation approach. Movie information is transformed into TF-IDF vectors and compared using cosine similarity.</p>
+                        <p>TMDB provides the visual and descriptive information that makes the recommendation experience feel like a complete movie platform.</p>
+                        
+                        <div class="technology-list">
+                            <div class="tech-item">
+                                <div class="tech-icon">ML</div>
+                                <div>
+                                    <strong>TF-IDF Vectorization</strong>
+                                    <span>Converts movie text into numerical representations.</span>
+                                </div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">ML</div>
+                                <div>
+                                    <strong>Cosine Similarity</strong>
+                                    <span>Measures similarity between movie feature vectors.</span>
+                                </div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">API</div>
+                                <div>
+                                    <strong>FastAPI</strong>
+                                    <span>Serves the recommendation model through REST APIs.</span>
+                                </div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">TMDB</div>
+                                <div>
+                                    <strong>TMDB Metadata</strong>
+                                    <span>Posters, ratings, cast, genres and movie details.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TECH VISUAL -->
+                    <div class="architecture-card reveal">
+                        <div class="architecture-header">
+                            <span>RECOMMENDATION PIPELINE</span>
+                            <span class="live-indicator"><i></i>LIVE</span>
+                        </div>
+                        <div class="architecture-flow">
+                            <div class="architecture-node">
+                                <div class="node-icon">01</div>
+                                <strong>Movie</strong>
+                                <span>Overview + genres</span>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="architecture-node">
+                                <div class="node-icon">02</div>
+                                <strong>TF-IDF</strong>
+                                <span>Feature vectors</span>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="architecture-node">
+                                <div class="node-icon">03</div>
+                                <strong>Similarity</strong>
+                                <span>Cosine distance</span>
+                            </div>
+                            <div class="flow-line"></div>
+                            <div class="architecture-node active">
+                                <div class="node-icon">04</div>
+                                <strong>Results</strong>
+                                <span>Ranked movies</span>
+                            </div>
+                        </div>
+                        <div class="architecture-footer">
+                            <span>Model</span>
+                            <strong>Content-Based Filtering</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ERROR -->
+        <div id="errorBox" class="error-box hidden" role="alert"></div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand reveal">
+                <a href="#top" class="brand">
+                    <span class="brand-mark">C</span>
+                    <span class="brand-text">Cine<span>Match</span></span>
+                </a>
+                <p>Intelligent movie discovery powered by machine learning.</p>
+            </div>
+
+            <div class="footer-links reveal">
+                <div>
+                    <strong>Product</strong>
+                    <a href="#discover">Discover</a>
+                    <a href="#how-it-works">How it works</a>
+                </div>
+                <div>
+                    <strong>Technology</strong>
+                    <a href="#technology">TF-IDF</a>
+                    <a href="#technology">FastAPI</a>
+                </div>
+                <div>
+                    <strong>Stack</strong>
+                    <span>HTML</span>
+                    <span>CSS</span>
+                    <span>JavaScript</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom reveal">
+            <span>© 2026 CineMatch</span>
+            <span>Built with FastAPI · Machine Learning · TMDB</span>
+        </div>
+    </footer>
+
+    <!-- MOVIE DETAIL MODAL -->
+    <div id="detailModal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <article class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="modal-close" id="modalClose" aria-label="Close movie details">×</button>
+            <div id="modalContent" class="modal-content"></div>
+        </article>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast hidden" role="status">
+        <span class="toast-icon">✓</span>
+        <span id="toastMessage">Done</span>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="app.js"></script>
+</body>
+</html>
